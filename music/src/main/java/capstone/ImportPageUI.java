@@ -8,6 +8,8 @@ public class ImportPageUI extends JFrame implements ActionListener {
     int scWidth;
     int scHeight;
     File pickedSong;
+    Song song;
+    SQLiteDB db;
     public ImportPageUI() {
         setTitle("Weighted Shuffle Player");
 
@@ -18,6 +20,8 @@ public class ImportPageUI extends JFrame implements ActionListener {
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
+
+        db = new SQLiteDB();
     }
 
     public void basicPageLayout() {
@@ -46,7 +50,9 @@ public class ImportPageUI extends JFrame implements ActionListener {
         int response = filePick.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
             pickedSong = filePick.getSelectedFile();
+            song = new Song(pickedSong.getPath());
+            
+            
         }
-        System.out.println(pickedSong.toString());
     }
 }
