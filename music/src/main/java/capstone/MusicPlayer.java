@@ -1,4 +1,5 @@
 package capstone;
+
 import javazoom.jl.player.advanced.PlaybackListener;
 
 import java.io.BufferedInputStream;
@@ -8,18 +9,22 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
 
 public class MusicPlayer extends PlaybackListener{
+    private PlayerUI playerUI;
+
     private Song currentSong;
 
     private AdvancedPlayer advancedPlayer;
 
     private boolean isPaused;
     private int currentFrame;
+    private int currentTimeMilliseconds;
 
     //constructor
-    public MusicPlayer(){
-
+    public MusicPlayer(PlayerUI playerUI){
+        this.playerUI = playerUI;
     }
 
+    //
     public void loadSong(Song song){
         currentSong = song;
 
@@ -44,6 +49,7 @@ public class MusicPlayer extends PlaybackListener{
     }
 
     public void playCurrentSong(){
+        if(currentSong == null) return;
         try{
             FileInputStream fileInputStream = new FileInputStream(currentSong.getFilePath());
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
@@ -72,6 +78,18 @@ public class MusicPlayer extends PlaybackListener{
                     }
                 } catch (Exception e){
                     e.printStackTrace();
+                }
+            }
+        }).start();
+     }
+
+     private void startPlaybackSliderThread(){
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                while(!isPaused){
+                    currentTimeMilliseconds += 1;
+                    int calculatedFrame = (int)((double)currentTimeMilliseconds * currentSong.getFrameRatePerMilliseconds());
                 }
             }
         }).start();
