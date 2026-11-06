@@ -73,7 +73,18 @@ public class SQLiteDB {
         }
     }
 
-    public void addSong() {
+    public void addSong(Song s) {
+        try {
+        Connection connection = DriverManager.getConnection(connectionUrl);
+        Statement stmt = connection.createStatement();
+        String addSongSql = "INSERT INTO Songs VALUES ("
+        + "NULL, "
+        + "'" + s.getFilePath() + "', "
+        + "'John Music');";
+        stmt.execute(addSongSql);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
     }
     

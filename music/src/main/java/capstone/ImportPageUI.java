@@ -51,8 +51,7 @@ public class ImportPageUI extends JFrame implements ActionListener {
         if (response == JFileChooser.APPROVE_OPTION) {
             pickedSong = filePick.getSelectedFile();
             song = new Song(pickedSong.getPath());
-            
-            
+            db.addSong(song);
         }
     }
 }
