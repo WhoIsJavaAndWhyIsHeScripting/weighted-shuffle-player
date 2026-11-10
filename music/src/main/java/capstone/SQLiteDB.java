@@ -2,7 +2,7 @@ package capstone;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class SQLiteDB {
     private String connectionUrl;
@@ -86,6 +86,28 @@ public class SQLiteDB {
             System.out.println(e);
         }
 
+    }
+
+    public void addUser(String username, String password) {
+        try {
+            Connection connection = DriverManager.getConnection(connectionUrl);
+            Statement stmt = connection.createStatement();
+            String loginSql = "SELECT username, password FROM Users WHERE username = '" + username + "';";
+            ResultSet results = stmt.executeQuery(loginSql);
+            String dbUser = results.getString("username");
+            String dbPassword = results.getString("password");
+            System.out.println(dbUser);
+            System.out.println(dbUser == null);
+            if (dbUser == null) {
+                String addUserSql = "INSERT INTO Users VALUES ("
+                + "'" +  username + "', "
+                + "'" + password + "');";
+                stmt.execute(addUserSql);
+                System.out.println("yay");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
     
 }
