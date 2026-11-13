@@ -6,15 +6,13 @@ import java.io.*;
 import javax.swing.*;
 
 public class UserUI extends JFrame implements ActionListener {
-    SQLiteDB db;
     int scWidth;
     int scHeight;
     JTextField usernameInput;
     JTextField passwordInput;
-    String user;
-    String pass;
-    public UserUI(SQLiteDB d) {
-        db = d;
+    boolean incorrectPopup;
+    public UserUI() {
+        incorrectPopup = false;
         setTitle("Login");
 
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -69,16 +67,34 @@ public class UserUI extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        user = usernameInput.getText();
-        pass = passwordInput.getText();
-        db.addUser(user, pass);
+        String user = usernameInput.getText();
+        String pass = passwordInput.getText();
+        boolean loginAttempt = SQLiteDB.loginUser(user, pass);
+        System.out.println(loginAttempt);
+        if (loginAttempt == true) {
+            setVisible(false);
+            ImportPageUI ui = new ImportPageUI();
+            ui.basicPageLayout();
+        } else {
+            loginFailPopup();
+        }
     }
 
-    public String getUsername() {
-        return user;
-    }
-
-    public String getPassword() {
-        return pass;
+    public void loginFailPopup() {
+        if (!incorrectPopup) {
+            JLabel popup = new JLabel("Incorrect Password");
+            popup.setSize(250, 50);
+            popup.setBackground(new Color(255, 100, 100));
+            GridBagConstraints c = new GridBagConstraints();
+            c.gridx = 0;
+            c.gridy = 3;
+            c.weightx = 1;
+            c.weighty = 0.25;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            add(popup, c);
+            incorrectPopup = true;
+            revalidate();
+            repaint();
+        }
     }
 }

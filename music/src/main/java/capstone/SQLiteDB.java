@@ -1,13 +1,10 @@
 package capstone;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.*;
 
 public class SQLiteDB {
-    private String connectionUrl;
-    private Connection connection;
-    public SQLiteDB() {
+    private static String connectionUrl;
+    private static Connection connection;
+    static {
         connectionUrl = "jdbc:sqlite:music//data//songs.db";
         try {
             connection = DriverManager.getConnection(connectionUrl);
@@ -72,8 +69,8 @@ public class SQLiteDB {
            System.out.println(e.getMessage());
         }
     }
-
-    public void addSong(Song s) {
+    // adds a song to the database
+    public static void addSong(Song s) {
         try {
         Connection connection = DriverManager.getConnection(connectionUrl);
         Statement stmt = connection.createStatement();
@@ -87,8 +84,11 @@ public class SQLiteDB {
         }
 
     }
-
-    public void addUser(String username, String password) {
+    // attempts to login user, or creates a new account if the username doesn't exist in the database
+    // username: the input username in the login screen
+    // password: the input password in the login screen
+    // returns whether the login/account creation was successful
+    public static boolean loginUser(String username, String password) {
         try {
             Connection connection = DriverManager.getConnection(connectionUrl);
             Statement stmt = connection.createStatement();
@@ -96,17 +96,23 @@ public class SQLiteDB {
             ResultSet results = stmt.executeQuery(loginSql);
             String dbUser = results.getString("username");
             String dbPassword = results.getString("password");
-            System.out.println(dbUser);
-            System.out.println(dbUser == null);
+            User.setUsername(dbUser);
+            User.setPassword(dbPassword);
             if (dbUser == null) {
                 String addUserSql = "INSERT INTO Users VALUES ("
                 + "'" +  username + "', "
                 + "'" + password + "');";
                 stmt.execute(addUserSql);
-                System.out.println("yay");
+                User.setUsername(username);
+                User.setPassword(password);
+                return true;
+            } else {
+                System.out.println("HEEEEELP");
+                return (User.checkPassword(password));
             }
         } catch (Exception e) {
             System.out.println(e);
+            return false;
         }
     }
     
