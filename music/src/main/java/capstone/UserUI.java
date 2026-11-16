@@ -6,11 +6,11 @@ import java.io.*;
 import javax.swing.*;
 
 public class UserUI extends JFrame implements ActionListener {
-    int scWidth;
-    int scHeight;
-    JTextField usernameInput;
-    JTextField passwordInput;
-    boolean incorrectPopup;
+    private int scWidth;
+    private int scHeight;
+    private JTextField usernameInput;
+    private JTextField passwordInput;
+    private boolean incorrectPopup;
     public UserUI() {
         incorrectPopup = false;
         setTitle("Login");

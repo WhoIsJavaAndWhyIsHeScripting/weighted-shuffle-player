@@ -65,6 +65,7 @@ public class SQLiteDB {
             statement.execute(createWeightTblSql);
             statement.execute(createPlaylistSongJunction);
             statement.execute(createArtistSongJunction);
+            connection.close();
         } catch(SQLException e) {
            System.out.println(e.getMessage());
         }
@@ -77,8 +78,9 @@ public class SQLiteDB {
         String addSongSql = "INSERT INTO Songs VALUES ("
         + "NULL, "
         + "'" + s.getFilePath() + "', "
-        + "'John Music');";
+        + "'" +User.getUsername() + "');";
         stmt.execute(addSongSql);
+        connection.close();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -105,9 +107,9 @@ public class SQLiteDB {
                 stmt.execute(addUserSql);
                 User.setUsername(username);
                 User.setPassword(password);
+                connection.close();
                 return true;
             } else {
-                System.out.println("HEEEEELP");
                 return (User.checkPassword(password));
             }
         } catch (Exception e) {
