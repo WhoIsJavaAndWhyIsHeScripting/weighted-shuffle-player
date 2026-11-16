@@ -48,7 +48,7 @@ public class Playlist{
             this.playlistLength = minutes + " " + minUnit + " " + seconds + " " + secUnit;
         }
     }
-    
+
     //random shuffle
     public void randomShuffle() {
         Collections.shuffle(this.songs);
