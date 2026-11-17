@@ -6,6 +6,7 @@ public class SQLiteDB {
     private static Connection connection;
     static {
         connectionUrl = "jdbc:sqlite:music//data//songs.db";
+        // initialize tables
         try {
             connection = DriverManager.getConnection(connectionUrl);
             System.out.println("database connected! ^_^");
@@ -65,12 +66,14 @@ public class SQLiteDB {
             statement.execute(createWeightTblSql);
             statement.execute(createPlaylistSongJunction);
             statement.execute(createArtistSongJunction);
+
             connection.close();
         } catch(SQLException e) {
            System.out.println(e.getMessage());
         }
     }
     // adds a song to the database
+    // only file path and owner user are necessary. other data can be pulled from the song's file
     public static void addSong(Song s) {
         try {
         Connection connection = DriverManager.getConnection(connectionUrl);
@@ -82,6 +85,21 @@ public class SQLiteDB {
         stmt.execute(addSongSql);
         connection.close();
         } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+    public static void createPlaylist(String name) {
+        try {
+            Connection connection = DriverManager.getConnection(connectionUrl);
+            Statement stmt = connection.createStatement();
+            String createPlaylistSql = "INSERT INTO Playlists VALUES ("
+            + "NULL, "
+            + "'" + name + "', " 
+            + "'" + User.getUsername() + "');";
+            stmt.execute(createPlaylistSql);
+            connection.close();
+        } catch (SQLException e) {
             System.out.println(e);
         }
 
@@ -100,6 +118,7 @@ public class SQLiteDB {
             String dbPassword = results.getString("password");
             User.setUsername(dbUser);
             User.setPassword(dbPassword);
+            // adds the new user account to the database if one doesn't exist already
             if (dbUser == null) {
                 String addUserSql = "INSERT INTO Users VALUES ("
                 + "'" +  username + "', "
@@ -110,6 +129,7 @@ public class SQLiteDB {
                 connection.close();
                 return true;
             } else {
+                // if the account exists, check the user's password
                 return (User.checkPassword(password));
             }
         } catch (Exception e) {

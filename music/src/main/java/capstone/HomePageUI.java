@@ -9,7 +9,7 @@ public class HomePageUI extends JFrame implements ActionListener {
     private int scHeight;
     public HomePageUI() {
         setTitle("Home");
-
+        // page automatically fills screen
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         scWidth = (int)screen.getWidth();
         scHeight = (int)screen.getHeight();
@@ -22,6 +22,7 @@ public class HomePageUI extends JFrame implements ActionListener {
 
     public void homePageLayout() {
         GridBagConstraints c = new GridBagConstraints();
+  
         JPanel sidebar = new JPanel();
         sidebar.setBackground(new Color(0xFFFFFF));
         c.fill = GridBagConstraints.BOTH;
@@ -31,6 +32,7 @@ public class HomePageUI extends JFrame implements ActionListener {
         c.weighty = 1;
         c.gridheight = 3;
         add(sidebar, c);
+
         JPanel main = new JPanel();
         main.setBackground(new Color(0xF0F0F0));
         c.fill = GridBagConstraints.BOTH;
@@ -39,6 +41,7 @@ public class HomePageUI extends JFrame implements ActionListener {
         add(main, c);
 
         JButton createPlaylistButton = new JButton("Create Playlist");
+        createPlaylistButton.addActionListener(this);
         c.gridx = 0;
         c.gridy = 0;
         c.ipadx = 10;
@@ -50,6 +53,7 @@ public class HomePageUI extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        
+        // opens a new dialog for setting your playlist's name and importing songs
+        NewPlaylistMaker n = new NewPlaylistMaker();
     }
 }

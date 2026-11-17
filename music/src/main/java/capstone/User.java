@@ -19,7 +19,8 @@ public class User {
     public static void setPassword(String p) {
         password = p;
     }
-
+    // p: the password passed in, usually the one input into the login form 
+    // returns whether the password matches
     public static boolean checkPassword (String p) {
         System.out.println(password);
         System.out.println(p);
