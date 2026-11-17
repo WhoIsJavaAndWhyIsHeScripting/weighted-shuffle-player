@@ -6,6 +6,7 @@ import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import java.util.ArrayList;
 
 import com.mpatric.mp3agic.Mp3File;
 
@@ -18,6 +19,7 @@ public class Song{
     private Mp3File mp3File;
     private double frameRatePerMilliseconds;
     private double weight;
+    private ArrayList<Tags> tags;
     //img
 
     public Song(String filePath){

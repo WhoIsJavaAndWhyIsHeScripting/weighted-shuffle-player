@@ -4,12 +4,13 @@ import javazoom.jl.player.advanced.PlaybackListener;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
 
 public class MusicPlayer extends PlaybackListener{
-    privte static final Object playSignal = new Object();
+    priavte static final Object playSignal = new Object();
 
     private PlayerUI playerUI;
 
@@ -25,6 +26,8 @@ public class MusicPlayer extends PlaybackListener{
 
     private int currentFrame;
     private int currentTimeMilliseconds;
+
+    private int loop = 0;
 
     //constructor
     public MusicPlayer(PlayerUI playerUI){
@@ -75,7 +78,7 @@ public class MusicPlayer extends PlaybackListener{
         if(playlist == null){
             return;
         }
-        if(currentPlaulistIndex+1 > playlist.size()-1){
+        if(currentPlaylistIndex+1 > playlist.size()-1){
             return;
         }
         if(!songFinished){
@@ -102,13 +105,20 @@ public class MusicPlayer extends PlaybackListener{
             stopSong();
         }
         currentPlaylistIndex--;
-        currentSong = playlist.get(currentPlaylistIndex);
-        currentFrame = 0;
-        currentTimeMilliseconds = 0;
         playerUI.enablePauseButtonDisablePlayButton();
         playerUI.updateSongTitleAndArtist(currentSong);
         playerUI.updatePlaybackSlider(currentSong);
         playCurrentSong();
+    }
+
+    private void playNextSongInPlaylist(){
+        if(playlist == null || playlist.isEmpty()){
+            return;
+        }
+        stopSong();
+        currentSong = playlist.get(currentPlaylistIndex);
+        currentFrame = 0;
+        currentTimeMilliseconds = 0;
     }
 
     private void startMusicThread(){
@@ -174,17 +184,55 @@ public class MusicPlayer extends PlaybackListener{
             currentFrame += (int)((double)evt.getFrame()*currentSong.getFrameRatePerMilliseconds());
         }
         else{
-            if(playlist == null){
-                playerUI.enablePlayButtonDisablePauseButton();
+            songFinished = true;
+            if(loop == 2){
+                currentFrame = 0;
+                currentTimeMilliseconds = 0;
+                playCurrentSong()
+            }
+            else if(loop = 1){
+                loop = 0;
+                currentFrame = 0;
+                currentTimeMilliseconds = 0;
+                playCurrentSong()
             }
             else{
-                //next song
+                if(playlist == null || playlist.isEmpty()){
+                    playerUI.enablePlayButtonDisablePauseButton();
+                }
+                else{
+                    if(currentPlaylistIndex+1 < playlist.size()){
+                        currentPlaylistIndex++;
+                    }
+                    else{
+                        //reshuffle
+                        playerUI.enablePlayButtonDisablePauseButton();
+                    }
+                }
             }
         }
     }
 
-     //getters
+    //setter
+    //loop = 0: do not repeat
+    // loop = 1: repeat once then change to 0
+    // loop = 2: repeat forever
+    public void setLoop(){
+        if(loop==0){
+            loop = 1;
+        }
+        else if(loop==1){
+            loop = 2;
+        }
+        else if(loop == 2){
+            loop = 0;
+        }
+        else{
+            loop = 0;
+        }
+    }
 
+     //getters
      public Song getCurrentSong(){
         return currentSong;
      }
