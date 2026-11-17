@@ -1,10 +1,14 @@
 package capstone;
+
 import java.io.File;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import java.util.ArrayList;
+
+import com.mpatric.mp3agic.Mp3File;
 
 public class Song{
     private String title;
@@ -12,10 +16,19 @@ public class Song{
     private String albumName;
     private String duration;
     private String filePath;
+    private Mp3File mp3File;
+    private double frameRatePerMilliseconds;
+    private double weight;
+    private ArrayList<Tags> tags;
+    //img
 
     public Song(String filePath){
         this.filePath = filePath;
         try{
+            mp3File = new Mp3File(filePath);
+            frameRatePerMilliseconds = ((double)mp3File.getFrameCount())/mp3File.getLengthInMilliseconds();
+            duration = convertToSongLengthFormat();
+
             //jaudio tagger library, created an audiofile object to read mp3 metadata
             AudioFile audioFile = AudioFileIO.read(new File(filePath));
 
@@ -33,6 +46,14 @@ public class Song{
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    private String convertToSongLengthFormat(){
+        long minutes = mp3File.getLengthInSeconds()/60;
+        long seconds = mp3File.getLengthInSeconds()%60;
+        String formattedTime = String.format("%d:%02d", minutes, seconds);
+
+        return formattedTime;
     }
 
     //getters
@@ -54,6 +75,14 @@ public class Song{
 
     public String getFilePath(){
         return filePath;
+    }
+
+    public Mp3File getMp3File(){
+        return mp3File;
+    }
+
+    public double getFrameRatePerMilliseconds(){
+        return frameRatePerMilliseconds;
     }
 
     //setters
