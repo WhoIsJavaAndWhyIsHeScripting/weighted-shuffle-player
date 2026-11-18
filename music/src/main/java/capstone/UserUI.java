@@ -80,8 +80,8 @@ public class UserUI extends JFrame implements ActionListener {
         if (loginAttempt == true) {
             setVisible(false);
             // switch to home page later
-            ImportPageUI ui = new ImportPageUI();
-            ui.basicPageLayout();
+            HomePageUI h = new HomePageUI();
+            h.homePageLayout();
         } else {
             loginFailPopup();
         }

@@ -93,8 +93,7 @@ public class SQLiteDB {
         try {
             Connection connection = DriverManager.getConnection(connectionUrl);
             Statement stmt = connection.createStatement();
-            String createPlaylistSql = "INSERT INTO Playlists VALUES ("
-            + "NULL, "
+            String createPlaylistSql = "INSERT INTO Playlists (playlistName, pCreatorUser) VALUES ("
             + "'" + name + "', " 
             + "'" + User.getUsername() + "');";
             stmt.execute(createPlaylistSql);
@@ -130,6 +129,7 @@ public class SQLiteDB {
                 return true;
             } else {
                 // if the account exists, check the user's password
+                connection.close();
                 return (User.checkPassword(password));
             }
         } catch (Exception e) {

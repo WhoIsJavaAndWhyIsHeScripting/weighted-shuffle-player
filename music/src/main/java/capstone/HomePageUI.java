@@ -55,5 +55,6 @@ public class HomePageUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // opens a new dialog for setting your playlist's name and importing songs
         NewPlaylistMaker n = new NewPlaylistMaker();
-    }
+        n.playlistForm();
+    } 
 }
