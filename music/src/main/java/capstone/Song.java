@@ -9,6 +9,7 @@ import org.jaudiotagger.tag.Tag;
 import java.util.ArrayList;
 
 import com.mpatric.mp3agic.Mp3File;
+import org.jaudiotagger.tag.*;
 
 public class Song{
     private String title;

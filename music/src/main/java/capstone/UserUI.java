@@ -6,11 +6,11 @@ import java.io.*;
 import javax.swing.*;
 
 public class UserUI extends JFrame implements ActionListener {
-    int scWidth;
-    int scHeight;
-    JTextField usernameInput;
-    JTextField passwordInput;
-    boolean incorrectPopup;
+    private int scWidth;
+    private int scHeight;
+    private JTextField usernameInput;
+    private JTextField passwordInput;
+    private boolean incorrectPopup;
     public UserUI() {
         incorrectPopup = false;
         setTitle("Login");
@@ -29,28 +29,33 @@ public class UserUI extends JFrame implements ActionListener {
     public void loginPageLayout() {
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(20,20,20,20);
+
         JLabel userLabel = new JLabel();
         userLabel.setText("Username:");
         c.gridx = 0;
         c.gridy = 0;
         getContentPane().add(userLabel, c);
+
         JLabel passLabel = new JLabel();
         passLabel.setText("Password:");
         c.gridx = 0;
         c.gridy = 1;
         getContentPane().add(passLabel, c);
+
         usernameInput = new JTextField(30);
         c.gridx = 1;
         c.gridy = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         getContentPane().add(usernameInput, c);
+
         passwordInput = new JPasswordField(30);
         c.gridx = 1;
         c.gridy = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         getContentPane().add(passwordInput, c);
+
         JButton loginButton = new JButton();
         loginButton.setText("Login");
         c.gridx = 0;
@@ -65,7 +70,8 @@ public class UserUI extends JFrame implements ActionListener {
         revalidate();
         repaint();
     }
-
+    // when clicking the login button, you are redirected to the home page if your password is correct
+    // otherwise, a "password incorrect" message is displayed
     public void actionPerformed(ActionEvent e) {
         String user = usernameInput.getText();
         String pass = passwordInput.getText();
@@ -73,8 +79,9 @@ public class UserUI extends JFrame implements ActionListener {
         System.out.println(loginAttempt);
         if (loginAttempt == true) {
             setVisible(false);
-            ImportPageUI ui = new ImportPageUI();
-            ui.basicPageLayout();
+            // switch to home page later
+            HomePageUI h = new HomePageUI();
+            h.homePageLayout();
         } else {
             loginFailPopup();
         }
@@ -85,6 +92,7 @@ public class UserUI extends JFrame implements ActionListener {
             JLabel popup = new JLabel("Incorrect Password");
             popup.setSize(250, 50);
             popup.setBackground(new Color(255, 100, 100));
+            
             GridBagConstraints c = new GridBagConstraints();
             c.gridx = 0;
             c.gridy = 3;
@@ -92,6 +100,7 @@ public class UserUI extends JFrame implements ActionListener {
             c.weighty = 0.25;
             c.fill = GridBagConstraints.HORIZONTAL;
             add(popup, c);
+            // prevent more popups from showing up
             incorrectPopup = true;
             revalidate();
             repaint();

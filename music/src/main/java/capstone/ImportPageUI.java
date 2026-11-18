@@ -49,5 +49,7 @@ public class ImportPageUI extends JFrame implements ActionListener {
             song = new Song(pickedSong.getPath());
             SQLiteDB.addSong(song);
         }
+        HomePageUI home = new HomePageUI();
+        home.homePageLayout();
     }
 }
