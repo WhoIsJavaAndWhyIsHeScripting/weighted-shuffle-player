@@ -3,10 +3,13 @@ package capstone;
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
+import java.util.*;
 
 public class HomePageUI extends JFrame implements ActionListener {
     private int scWidth;
     private int scHeight;
+    private JPanel sidebar;
+    private JPanel main;
     public HomePageUI() {
         setTitle("Home");
         // page automatically fills screen
@@ -23,7 +26,7 @@ public class HomePageUI extends JFrame implements ActionListener {
     public void homePageLayout() {
         GridBagConstraints c = new GridBagConstraints();
   
-        JPanel sidebar = new JPanel();
+        sidebar = new JPanel(new GridBagLayout());
         sidebar.setBackground(new Color(0xFFFFFF));
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
@@ -33,7 +36,7 @@ public class HomePageUI extends JFrame implements ActionListener {
         c.gridheight = 3;
         add(sidebar, c);
 
-        JPanel main = new JPanel();
+        main = new JPanel(new GridBagLayout());
         main.setBackground(new Color(0xF0F0F0));
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 1;
@@ -42,14 +45,36 @@ public class HomePageUI extends JFrame implements ActionListener {
 
         JButton createPlaylistButton = new JButton("Create Playlist");
         createPlaylistButton.addActionListener(this);
+        c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;
+        c.gridheight = 1;
         c.ipadx = 10;
-        c.ipady = 10;
+        c.ipady = 20;
         sidebar.add(createPlaylistButton, c);
 
+        ArrayList<Playlist> userPlaylists = SQLiteDB.getPlaylists();
+        for (int i = 0; i < userPlaylists.size(); i++) {
+           displayPlaylist(userPlaylists.get(i), i+1); 
+        }
         revalidate();
         repaint();
+    }
+
+    public void displayPlaylist(Playlist p, int yPos) {
+        JButton playlistContainer = new JButton();
+        playlistContainer.setText(p.getName());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = yPos;
+        c.weightx = 0.8;
+        c.weighty = 1;
+        c.ipadx = 10;
+        c.ipady = 20;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(10, 10, 10, 10);
+
+        sidebar.add(playlistContainer, c);
     }
 
     public void actionPerformed(ActionEvent e) {

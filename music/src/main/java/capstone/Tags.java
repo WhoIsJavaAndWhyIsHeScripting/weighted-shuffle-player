@@ -1,3 +1,5 @@
+package capstone;
+
 public class Tags{
     private String name;
     private double tagWeight;

@@ -1,4 +1,4 @@
-
+package capstone;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -13,6 +13,10 @@ public class Playlist{
         this.name = name;
         this.songs = new ArrayList<>();
         this.playlistLength = "0 mins 0 secs";
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void addSong(Song song){

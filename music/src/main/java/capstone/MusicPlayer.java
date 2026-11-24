@@ -10,7 +10,7 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
 
 public class MusicPlayer extends PlaybackListener{
-    priavte static final Object playSignal = new Object();
+    private static final Object playSignal = new Object();
 
     private PlayerUI playerUI;
 
@@ -98,7 +98,7 @@ public class MusicPlayer extends PlaybackListener{
         if(playlist == null){
             return;
         }
-        if(currentPlaulistIndex-1 < 0){
+        if(currentPlaylistIndex-1 < 0){
             return;
         }
         if(!songFinished){
@@ -188,13 +188,13 @@ public class MusicPlayer extends PlaybackListener{
             if(loop == 2){
                 currentFrame = 0;
                 currentTimeMilliseconds = 0;
-                playCurrentSong()
+                playCurrentSong();
             }
-            else if(loop = 1){
+            else if(loop == 1){
                 loop = 0;
                 currentFrame = 0;
                 currentTimeMilliseconds = 0;
-                playCurrentSong()
+                playCurrentSong();
             }
             else{
                 if(playlist == null || playlist.isEmpty()){

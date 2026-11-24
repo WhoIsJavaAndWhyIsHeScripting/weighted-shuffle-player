@@ -1,5 +1,6 @@
 package capstone;
 import java.sql.*;
+import java.util.*;
 
 public class SQLiteDB {
     private static String connectionUrl;
@@ -74,7 +75,7 @@ public class SQLiteDB {
     }
     // adds a song to the database
     // only file path and owner user are necessary. other data can be pulled from the song's file
-    public static void addSong(Song s) {
+    public static void addSong(Song s, Playlist p) {
         try {
         Connection connection = DriverManager.getConnection(connectionUrl);
         Statement stmt = connection.createStatement();
@@ -83,6 +84,16 @@ public class SQLiteDB {
         + "'" + s.getFilePath() + "', "
         + "'" +User.getUsername() + "');";
         stmt.execute(addSongSql);
+        String songIDQuery = "select songID from Songs WHERE user = '" + User.getUsername() + "' AND filePath = '" + s.getFilePath() + "'";
+        ResultSet sIDrs = stmt.executeQuery(songIDQuery);
+        int targetSongID = sIDrs.getInt("songID");
+        String playlistIDQuery = "SELECT playlistID FROM Playlists WHERE pCreatorUser = '" + User.getUsername() + "' AND playlistName = '" + p.getName() + "'";
+        ResultSet pIDrs = stmt.executeQuery(playlistIDQuery);
+        int targetPlaylistID = pIDrs.getInt("playlistID");
+        String addSongToPlaylistSql = "INSERT INTO PlaylistSong (songID, playlistID) VALUES ("
+        + "'" + targetSongID + "', "
+        + "'" + targetPlaylistID + "');";
+        stmt.execute(addSongToPlaylistSql);
         connection.close();
         } catch (Exception e) {
             System.out.println(e);
@@ -102,6 +113,23 @@ public class SQLiteDB {
             System.out.println(e);
         }
 
+    }
+
+    public static ArrayList<Playlist> getPlaylists() {
+        try {
+            Connection connection = DriverManager.getConnection(connectionUrl);
+            Statement stmt = connection.createStatement();
+            String playlistQuery = "SELECT playlistName FROM Playlists WHERE pCreatorUser = '" + User.getUsername() + "'";
+            ResultSet userPlaylists = stmt.executeQuery(playlistQuery);
+            ArrayList<Playlist> playlists = new ArrayList<>();
+            while (userPlaylists.next()) {
+                playlists.add(new Playlist(userPlaylists.getString("playlistName"))); 
+            }
+            return playlists;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
     // attempts to login user, or creates a new account if the username doesn't exist in the database
     // username: the input username in the login screen

@@ -32,17 +32,17 @@ public class NewPlaylistMaker extends JFrame {
         c.insets = new Insets(5, 10, 5, 20);
         add(pNameField, c);
 
-        JButton importButton = new JButton("Add Songs");
+        JButton submitButton = new JButton("Save Changes");
         c.gridx = 0;
         c.gridy = 1;
-        c.insets = new Insets(10, 40, 10, 40);
-        add(importButton, c);
-
-        JButton submitButton = new JButton("Save Changes");
-        c.gridx = 1;
         submitButton.addActionListener(e -> {
             String playlistName = pNameField.getText();
             if (playlistName != null) SQLiteDB.createPlaylist(playlistName);
+            setVisible(false);
+            ImportPageUI i = new ImportPageUI(playlistName);
+            i.basicPageLayout();
+            revalidate();
+            repaint();
         });
         add(submitButton, c);
         revalidate();

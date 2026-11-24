@@ -76,7 +76,6 @@ public class UserUI extends JFrame implements ActionListener {
         String user = usernameInput.getText();
         String pass = passwordInput.getText();
         boolean loginAttempt = SQLiteDB.loginUser(user, pass);
-        System.out.println(loginAttempt);
         if (loginAttempt == true) {
             setVisible(false);
             // switch to home page later

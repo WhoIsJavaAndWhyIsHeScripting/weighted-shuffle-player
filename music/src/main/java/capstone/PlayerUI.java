@@ -111,8 +111,8 @@ public class PlayerUI extends JFrame{
     }
 
     public void updateSongTitleAndArtist(Song song){
-        songTitle.setTest(song.getSongTitle());
-        songArtist.setText(song.getSongArtist());
+        songTitle.setText(song.getTitle());
+        songArtist.setText(song.getArtist());
     }
 
     public void updatePlaybackSlider(Song song){
